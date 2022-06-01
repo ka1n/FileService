@@ -1,43 +1,24 @@
-using FileService;
-using FileService.Services;
-using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
-using System.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var config = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json", optional: false)
-        .Build();
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//builder.Services.AddDbContext<DbContext, ApplicationContext>(options => options.UseNpgsql(config.GetConnectionString()) "));
-builder.Services.AddDbContext<DbContext, ApplicationContext>(options =>
+namespace FileService
 {
-    options.UseNpgsql(config.GetConnectionString("PgSqlConnectionString"));
-});
-builder.Services.AddScoped<IFileProcessingService, FileProcessingService>();
-builder.WebHost.UseHttpSys(options =>
-{
-    options.MaxRequestBodySize = 100_000_000;
-});
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.Limits.MaxRequestBodySize = 100_000_000;
+                    });
+                });
+    }
 }
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

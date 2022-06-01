@@ -1,4 +1,8 @@
 ﻿using Domain.File;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileService.Services
 {
@@ -8,7 +12,7 @@ namespace FileService.Services
 
         public Task<Guid> AddFileAsync(IFormFile file);
 
-        public Task<Dictionary<Guid, string>> AddFilesAsync(IFormFileCollection formFiles);
+        public Task<Dictionary<string, Guid>> AddFilesAsync(IFormFileCollection formFiles);
 
         public Task<Guid> CreateTemporaryLink(Guid guid);
 

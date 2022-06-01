@@ -1,11 +1,5 @@
-﻿using Domain;
-using Domain.File;
+﻿using Domain.File;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileService
 {

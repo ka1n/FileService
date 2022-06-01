@@ -1,6 +1,11 @@
-﻿using Domain;
-using Domain.File;
+﻿using Domain.File;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FileService.Services
 {
@@ -32,9 +37,9 @@ namespace FileService.Services
             }
         }
 
-        public async Task<Dictionary<Guid, string>> AddFilesAsync(IFormFileCollection uploadedFiles)
+        public async Task<Dictionary<string, Guid>> AddFilesAsync(IFormFileCollection uploadedFiles)
         {
-            var filesDic = new Dictionary<Guid, string>();
+            var filesDic = new Dictionary<string, Guid>();
             var files = new List<FileModel>();
             foreach (var uploadedFile in uploadedFiles)
             {
@@ -45,7 +50,7 @@ namespace FileService.Services
                     var fileName = uploadedFile.FileName;
 
                     var guid = Guid.NewGuid();
-                    filesDic.Add(guid, fileName);
+                    filesDic.Add(fileName, guid);
 
                     files.Add(
                         new FileModel

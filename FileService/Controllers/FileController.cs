@@ -1,9 +1,9 @@
-﻿using Domain;
-using Domain.File;
-using FileService.Services;
+﻿using FileService.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Net.Http.Headers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FileService.Controllers
 {
@@ -19,7 +19,7 @@ namespace FileService.Controllers
 
         [HttpPost]
         [Route("add-files-async")]
-        public async Task<Dictionary<Guid, string>> AddFilesAsync(IFormFileCollection uploadedFiles)
+        public async Task<Dictionary<string, Guid>> AddFilesAsync(IFormFileCollection uploadedFiles)
         {
             return await _fileProcessingService.AddFilesAsync(uploadedFiles);
         }
